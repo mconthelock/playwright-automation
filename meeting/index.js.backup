@@ -5,7 +5,18 @@ const { chromium } = require("playwright");
 const launchOptions = {
   headless: false,
   args: [
-    "--no-sandbox",
+      await page.getByRole("button", { name: "Add room" }).click();
+  console.log("✅ กดปุ่ม Add room แล้ว");
+
+  // รอให้ popup ขึ้น
+  await page.waitForSelector('div[role="dialog"], div._exadr_c.scrollContainer', {
+    timeout: 15000,
+  }).catch(() => {
+    throw new Error("❌ ยังไม่เห็น popup เลือกห้อง");
+  });
+
+  // รอให้เลิกแสดง "Finding rooms…"
+  await waitUntilRoomsAreLoaded(page);,
     "--disable-setuid-sandbox",
     "--disable-blink-features=AutomationControlled",
     "--disable-infobars",
